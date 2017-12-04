@@ -212,10 +212,18 @@ func createDebPackages() {
 		initdScriptFilePath:    "/etc/init.d/grafana-server",
 		systemdServiceFilePath: "/usr/lib/systemd/system/grafana-server.service",
 
+		adminEtcDefaultFilePath:     "/etc/default/grafana-admin-server",
+		adminInitdScriptFilePath:    "/etc/init.d/grafana-admin-server",
+		adminSystemdServiceFilePath: "/usr/lib/systemd/system/grafana-admin-server.service",
+
 		postinstSrc:    "packaging/deb/control/postinst",
 		initdScriptSrc: "packaging/deb/init.d/grafana-server",
 		defaultFileSrc: "packaging/deb/default/grafana-server",
 		systemdFileSrc: "packaging/deb/systemd/grafana-server.service",
+
+		adminInitdScriptSrc: "packaging/deb/init.d/grafana-admin-server",
+		adminDefaultFileSrc: "packaging/deb/default/grafana-admin-server",
+		adminSystemdFileSrc: "packaging/deb/systemd/grafana-admin-server.service",
 
 		depends: []string{"adduser", "libfontconfig"},
 	})
@@ -263,10 +271,13 @@ func createPackage(options linuxPackageOptions) {
 	}
 	// copy init.d script
 	runPrint("cp", "-p", options.initdScriptSrc, filepath.Join(packageRoot, options.initdScriptFilePath))
+	runPrint("cp", "-p", options.adminInitdScriptSrc, filepath.Join(packageRoot, options.adminInitdScriptFilePath))
 	// copy environment var file
 	runPrint("cp", "-p", options.defaultFileSrc, filepath.Join(packageRoot, options.etcDefaultFilePath))
+	runPrint("cp", "-p", options.adminDefaultFileSrc, filepath.Join(packageRoot, options.adminEtcDefaultFilePath))
 	// copy systemd file
 	runPrint("cp", "-p", options.systemdFileSrc, filepath.Join(packageRoot, options.systemdServiceFilePath))
+	runPrint("cp", "-p", options.adminSystemdFileSrc, filepath.Join(packageRoot, options.adminSystemdServiceFilePath))
 	// copy release files
 	runPrint("cp", "-a", filepath.Join(workingDir, "tmp")+"/.", filepath.Join(packageRoot, options.homeDir))
 	// remove bin path
@@ -283,6 +294,9 @@ func createPackage(options linuxPackageOptions) {
 		"--config-files", options.initdScriptFilePath,
 		"--config-files", options.etcDefaultFilePath,
 		"--config-files", options.systemdServiceFilePath,
+		"--config-files", options.adminInitdScriptFilePath,
+		"--config-files", options.adminEtcDefaultFilePath,
+		"--config-files", options.adminSystemdServiceFilePath,
 		"--after-install", options.postinstSrc,
 		"--name", "grafana",
 		"--version", linuxPackageVersion,
