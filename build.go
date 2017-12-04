@@ -193,10 +193,18 @@ type linuxPackageOptions struct {
 	initdScriptFilePath    string
 	systemdServiceFilePath string
 
+	adminEtcDefaultFilePath     string
+	adminInitdScriptFilePath    string
+	adminSystemdServiceFilePath string
+
 	postinstSrc    string
 	initdScriptSrc string
 	defaultFileSrc string
 	systemdFileSrc string
+
+	adminInitdScriptSrc string
+	adminDefaultFileSrc string
+	adminSystemdFileSrc string
 
 	depends []string
 }
