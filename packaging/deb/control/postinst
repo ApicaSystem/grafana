@@ -20,14 +20,15 @@ case "$1" in
 		"$GRAFANA_USER"
 	fi
 
-	# Set user permissions on /var/log/grafana, /var/lib/grafana
-	mkdir -p /var/log/grafana /var/lib/grafana
-	chown -R $GRAFANA_USER:$GRAFANA_GROUP /var/log/grafana /var/lib/grafana
-	chmod 755 /var/log/grafana /var/lib/grafana
+	# Set user permissions on /var/log/grafana(-admin), /var/lib/grafana(-admin), 
+	mkdir -p /var/log/grafana /var/log/grafana-admin /var/lib/grafana /var/lib/grafana-admin
+	chown -R $GRAFANA_USER:$GRAFANA_GROUP /var/log/grafana /var/log/grafana-admin /var/lib/grafana /var/lib/grafana-admin
+	chmod 755 /var/log/grafana /var/log/grafana-admin /var/lib/grafana /var/lib/grafana-admin
 
   # copy user config files
   if [ ! -f $CONF_FILE ]; then
     cp /usr/share/grafana/conf/sample.ini $CONF_FILE
+    cp /usr/share/grafana/conf/sample.ini /etc/grafana/grafana-admin.ini
     cp /usr/share/grafana/conf/ldap.toml /etc/grafana/ldap.toml
   fi
 
@@ -62,11 +63,14 @@ case "$1" in
     if command -v systemctl >/dev/null; then
       systemctl daemon-reload
       systemctl restart grafana-server || true
+      systemctl restart grafana-admin-server || true
     elif [ -x /etc/init.d/grafana-server ]; then
       if command -v invoke-rc.d >/dev/null; then
         invoke-rc.d grafana-server restart || true
+        invoke-rc.d grafana-admin-server restart || true
       else
         /etc/init.d/grafana-server restart || true
+        /etc/init.d/grafana-admin-server restart || true
       fi
     fi
     echo " OK"
