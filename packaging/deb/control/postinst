@@ -20,10 +20,10 @@ case "$1" in
 		"$GRAFANA_USER"
 	fi
 
-	# Set user permissions on /var/log/grafana, /var/lib/grafana
-	mkdir -p /var/log/grafana /var/log/grafana-admin /var/lib/grafana
-	chown -R $GRAFANA_USER:$GRAFANA_GROUP /var/log/grafana /var/log/grafana-admin /var/lib/grafana
-	chmod 755 /var/log/grafana /var/log/grafana-admin /var/lib/grafana
+	# Set user permissions on /var/log/grafana(-admin), /var/lib/grafana(-admin), 
+	mkdir -p /var/log/grafana /var/log/grafana-admin /var/lib/grafana /var/lib/grafana-admin
+	chown -R $GRAFANA_USER:$GRAFANA_GROUP /var/log/grafana /var/log/grafana-admin /var/lib/grafana /var/lib/grafana-admin
+	chmod 755 /var/log/grafana /var/log/grafana-admin /var/lib/grafana /var/lib/grafana-admin
 
   # copy user config files
   if [ ! -f $CONF_FILE ]; then
