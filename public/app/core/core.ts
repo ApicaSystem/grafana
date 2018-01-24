@@ -3,6 +3,7 @@ import "./directives/confirm_click";
 import "./directives/dash_edit_link";
 import "./directives/dropdown_typeahead";
 import "./directives/metric_segment";
+import "./directives/asm_metric_segment";
 import "./directives/misc";
 import "./directives/ng_model_on_blur";
 import "./directives/tags";
